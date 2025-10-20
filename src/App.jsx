@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 // Importamos nuestros componentes desde sus nuevas carpetas.
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
+import Header from './components/header.jsx'
+import Footer from './components/footer.jsx';
+import HomePage from './pages/HomePage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
+import ContactPage from './pages/ContactPage.jsx';
 
 function App() {
   // Este estado ('currentPage') ahora controlará qué página se muestra.
