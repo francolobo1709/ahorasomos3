@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 
 // Importamos nuestros componentes desde sus nuevas carpetas.
-import Header from './components/Header.jsx'
+import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx';
 import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
+import ReservationPage from './pages/ReservationPage.jsx';
 
 function App() {
   // Este estado ('currentPage') ahora controlará qué página se muestra.
   const [currentPage, setCurrentPage] = useState('home');
+  const [selectedService, setSelectedService] = useState(null);
 
   // Esta función se la pasaremos al Header para que pueda cambiar el estado.
   const handleNavigate = (page) => {
     setCurrentPage(page);
     window.scrollTo(0, 0); // Sube al inicio de la página cada vez que navegamos.
+  };
+
+  // Función para navegar a reservas con servicio seleccionado
+  const handleReservation = (service) => {
+    setSelectedService(service);
+    setCurrentPage('reservation');
+    window.scrollTo(0, 0);
   };
 
   // Función para renderizar la página actual basada en el estado.
@@ -25,18 +34,24 @@ function App() {
     if (currentPage === 'contact') {
       return <ContactPage />;
     }
+    if (currentPage === 'reservation') {
+      return <ReservationPage 
+        selectedService={selectedService} 
+        onBack={() => handleNavigate('home')} 
+      />;
+    }
     // Por defecto, siempre mostramos la página de inicio.
-    return <HomePage />;
+    return <HomePage onReservation={handleReservation} />;
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen text-gray-800 font-sans flex flex-col">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', fontFamily: 'Arial, sans-serif' }}>
       
-      {/* El Header recibe la función 'handleNavigate' como una "prop" */}
-      <Header onNavigate={handleNavigate} />
+      {/* El Navbar recibe la función 'handleNavigate' como una "prop" */}
+      <Navbar onNavigate={handleNavigate} />
 
-      {/* El main ahora tiene un 'flex-grow' para ocupar el espacio disponible */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
+      {/* Contenido principal */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1rem' }}>
         {/* Llamamos a la función que decide qué página mostrar */}
         {renderCurrentPage()}
       </main>
