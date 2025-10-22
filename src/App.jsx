@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 // Importamos nuestros componentes desde sus nuevas carpetas.
-import Header from './components/header.jsx'
-import Footer from './components/footer.jsx';
+import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx';
 import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
