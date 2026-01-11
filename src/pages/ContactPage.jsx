@@ -30,35 +30,16 @@ const ContactPage = () => {
   };
 
   return (
-    <div style={{
-      backgroundColor: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-      padding: '3rem',
-      maxWidth: '800px',
-      margin: '0 auto',
-      marginTop: '2rem'
-    }}>
-      <h1 style={{
-        fontSize: '2.5rem',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: '#059669',
-        marginBottom: '2rem'
-      }}>
+    <div className="contact-container">
+      <h1 className="contact-title">
         Ponte en Contacto
       </h1>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <form onSubmit={handleSubmit} className="contact-form">
         {/* Información Personal */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+        <div className="contact-form-grid">
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Nombre
             </label>
             <input
@@ -67,26 +48,11 @@ const ContactPage = () => {
               value={formData.nombre}
               onChange={handleInputChange}
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Apellido
             </label>
             <input
@@ -95,30 +61,15 @@ const ContactPage = () => {
               value={formData.apellido}
               onChange={handleInputChange}
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
         </div>
 
         {/* Contacto */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+        <div className="contact-form-grid">
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Email
             </label>
             <input
@@ -127,26 +78,11 @@ const ContactPage = () => {
               value={formData.email}
               onChange={handleInputChange}
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Teléfono
             </label>
             <input
@@ -155,47 +91,21 @@ const ContactPage = () => {
               value={formData.telefono}
               onChange={handleInputChange}
               required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
         </div>
 
         {/* Tipo de Consulta */}
-        <div>
-          <label style={{
-            display: 'block',
-            marginBottom: '0.5rem',
-            fontWeight: '600',
-            color: '#374151'
-          }}>
+        <div className="contact-form-field">
+          <label className="contact-form-label">
             Tipo de Consulta
           </label>
           <select
             name="tipoConsulta"
             value={formData.tipoConsulta}
             onChange={handleInputChange}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '2px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              outline: 'none',
-              backgroundColor: 'white',
-              transition: 'border-color 0.2s'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#059669'}
-            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+            className="contact-form-select"
           >
             <option value="general">Consulta General</option>
             <option value="cotizacion">Solicitar Cotización</option>
@@ -206,14 +116,9 @@ const ContactPage = () => {
         </div>
 
         {/* Fecha y Hora Preferida */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+        <div className="contact-form-grid">
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Fecha Preferida de Contacto
             </label>
             <input
@@ -221,26 +126,11 @@ const ContactPage = () => {
               name="fecha"
               value={formData.fecha}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Hora Preferida
             </label>
             <input
@@ -248,29 +138,14 @@ const ContactPage = () => {
               name="hora"
               value={formData.hora}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
         </div>
 
         {/* Dirección */}
-        <div>
-          <label style={{
-            display: 'block',
-            marginBottom: '0.5rem',
-            fontWeight: '600',
-            color: '#374151'
-          }}>
+        <div className="contact-form-field">
+          <label className="contact-form-label">
             Dirección (Opcional)
           </label>
           <input
@@ -279,28 +154,13 @@ const ContactPage = () => {
             value={formData.direccion}
             onChange={handleInputChange}
             placeholder="Calle y número"
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '2px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              outline: 'none',
-              transition: 'border-color 0.2s'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#059669'}
-            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+            className="contact-form-input"
           />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+        <div className="contact-form-grid">
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Ciudad
             </label>
             <input
@@ -308,26 +168,11 @@ const ContactPage = () => {
               name="ciudad"
               value={formData.ciudad}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '600',
-              color: '#374151'
-            }}>
+          <div className="contact-form-field">
+            <label className="contact-form-label">
               Código Postal
             </label>
             <input
@@ -335,29 +180,14 @@ const ContactPage = () => {
               name="codigoPostal"
               value={formData.codigoPostal}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '2px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#059669'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              className="contact-form-input"
             />
           </div>
         </div>
 
         {/* Comentarios */}
-        <div>
-          <label style={{
-            display: 'block',
-            marginBottom: '0.5rem',
-            fontWeight: '600',
-            color: '#374151'
-          }}>
+        <div className="contact-form-field">
+          <label className="contact-form-label">
             Comentarios o Detalles
           </label>
           <textarea
@@ -366,44 +196,14 @@ const ContactPage = () => {
             onChange={handleInputChange}
             rows={4}
             placeholder="Cuéntanos más sobre tu consulta..."
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '2px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              outline: 'none',
-              resize: 'vertical',
-              transition: 'border-color 0.2s'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#059669'}
-            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+            className="contact-form-textarea"
           />
         </div>
 
         {/* Botón de Enviar */}
         <button
           type="submit"
-          style={{
-            backgroundColor: '#059669',
-            color: 'white',
-            padding: '1rem 2rem',
-            borderRadius: '8px',
-            fontWeight: '600',
-            fontSize: '1.1rem',
-            border: 'none',
-            cursor: 'pointer',
-            marginTop: '1rem',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#047857';
-            e.currentTarget.style.transform = 'scale(1.05)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#059669';
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
+          className="contact-form-button"
         >
           Enviar Consulta
         </button>

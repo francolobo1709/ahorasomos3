@@ -1,65 +1,97 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 
-// Importamos nuestros componentes desde sus nuevas carpetas.
-import Navbar from './components/Navbar.jsx'
+// Importamos nuestros componentes
+import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
+import WhatsAppButton from './components/WhatsAppButton.jsx';
+import OnlineStatus from './components/OnlineStatus.jsx';
 import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import ReservationPage from './pages/ReservationPage.jsx';
+import WorkerProfilePage from './pages/WorkerProfilePage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import DashboardWorkerPage from './pages/DashboardWorkerPage.jsx';
+import DashboardClientPage from './pages/DashboardClientPage.jsx';
 
-function App() {
-  // Este estado ('currentPage') ahora controlará qué página se muestra.
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedService, setSelectedService] = useState(null);
+// Componente para rutas protegidas
+function ProtectedRoute({ children, requiredRole }) {
+  const { currentUser, userProfile } = useAuth();
+  
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (requiredRole && userProfile?.role !== requiredRole) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+}
 
-  // Esta función se la pasaremos al Header para que pueda cambiar el estado.
-  const handleNavigate = (page) => {
-    setCurrentPage(page);
-    window.scrollTo(0, 0); // Sube al inicio de la página cada vez que navegamos.
-  };
-
-  // Función para navegar a reservas con servicio seleccionado
-  const handleReservation = (service) => {
-    setSelectedService(service);
-    setCurrentPage('reservation');
-    window.scrollTo(0, 0);
-  };
-
-  // Función para renderizar la página actual basada en el estado.
-  const renderCurrentPage = () => {
-    if (currentPage === 'about') {
-      return <AboutPage />;
-    }
-    if (currentPage === 'contact') {
-      return <ContactPage />;
-    }
-    if (currentPage === 'reservation') {
-      return <ReservationPage 
-        selectedService={selectedService} 
-        onBack={() => handleNavigate('home')} 
-      />;
-    }
-    // Por defecto, siempre mostramos la página de inicio.
-    return <HomePage onReservation={handleReservation} />;
-  };
+function AppContent() {
+  const { currentUser, userProfile } = useAuth();
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', fontFamily: 'Arial, sans-serif' }}>
+    <div className="min-h-screen bg-gray-50">
+      {/* Indicador de estado online/offline */}
+      <OnlineStatus />
       
-      {/* El Navbar recibe la función 'handleNavigate' como una "prop" */}
-      <Navbar onNavigate={handleNavigate} />
+      {/* Navbar con navegación por rutas */}
+      <Navbar />
 
-      {/* Contenido principal */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1rem' }}>
-        {/* Llamamos a la función que decide qué página mostrar */}
-        {renderCurrentPage()}
+      {/* Contenido principal con rutas */}
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/reservation" element={<ReservationPage />} />
+          <Route path="/worker/:workerId" element={<WorkerProfilePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Rutas protegidas para trabajadores */}
+          <Route 
+            path="/dashboard/worker" 
+            element={
+              <ProtectedRoute requiredRole="worker">
+                <DashboardWorkerPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Rutas protegidas para clientes */}
+          <Route 
+            path="/dashboard/client" 
+            element={
+              <ProtectedRoute requiredRole="client">
+                <DashboardClientPage />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
       </main>
 
-      {/* Nuestro nuevo componente Footer */}
+      {/* Footer */}
       <Footer />
-      
+
+      {/* Botón flotante de WhatsApp */}
+      <WhatsAppButton />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   );
 }
 

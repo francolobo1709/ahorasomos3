@@ -33,244 +33,156 @@ const ReservationPage = ({ selectedService, onBack }) => {
   };
 
   return (
-    <div style={{ 
-      backgroundColor: 'white', 
-      borderRadius: '16px', 
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
-      padding: '2rem',
-      maxWidth: '600px',
-      margin: '0 auto'
-    }}>
+    <div className="reservation-container">
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+      <div className="reservation-header">
         <button 
           onClick={onBack}
-          style={{
-            position: 'absolute',
-            left: '1rem',
-            background: 'none',
-            border: 'none',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            color: '#059669'
-          }}
+          className="reservation-back-button"
         >
           ← Volver
         </button>
-        <h1 style={{
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#059669',
-          marginBottom: '0.5rem'
-        }}>
+        <h1 className="reservation-title">
           Reservar Servicio
         </h1>
-        <p style={{ color: '#6b7280' }}>
+        <p className="reservation-subtitle">
           Complete el formulario para solicitar su servicio de limpieza
         </p>
       </div>
       
       {/* Formulario */}
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          {/* Información Personal */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div>
-              <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                Nombre *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
-              />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                Email *
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Teléfono */}
-          <div>
-            <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              Teléfono *
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
-            />
-          </div>
-
-          {/* Tipo de Servicio */}
-          <div>
-            <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              Tipo de Servicio *
-            </label>
-            <select
-              name="service"
-              value={formData.service}
-              onChange={handleInputChange}
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                backgroundColor: 'white'
-              }}
-            >
-              {services.map(service => (
-                <option key={service} value={service}>{service}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Fecha y Hora */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div>
-              <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                Fecha *
-              </label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
-              />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-                Hora *
-              </label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleInputChange}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Dirección */}
-          <div>
-            <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              Dirección *
+      <form onSubmit={handleSubmit} className="reservation-form">
+        {/* Información Personal */}
+        <div className="reservation-form-grid">
+          <div className="reservation-form-field">
+            <label className="reservation-form-label">
+              Nombre *
             </label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="name"
+              value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder="Calle, número, ciudad"
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="reservation-form-input"
             />
           </div>
-
-          {/* Mensaje */}
-          <div>
-            <label style={{ display: 'block', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
-              Comentarios adicionales
+          <div className="reservation-form-field">
+            <label className="reservation-form-label">
+              Email *
             </label>
-            <textarea
-              name="message"
-              value={formData.message}
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleInputChange}
-              rows="4"
-              placeholder="Detalles especiales, instrucciones de acceso, etc."
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                resize: 'vertical'
-              }}
+              required
+              className="reservation-form-input"
             />
           </div>
-
-          {/* Botón de envío */}
-          <button
-            type="submit"
-            style={{
-              backgroundColor: '#059669',
-              color: 'white',
-              padding: '1rem',
-              borderRadius: '8px',
-              fontWeight: '600',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1.1rem',
-              transition: 'background-color 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#047857';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#059669';
-            }}
-          >
-            Enviar Reserva
-          </button>
         </div>
+
+        {/* Teléfono */}
+        <div className="reservation-form-field">
+          <label className="reservation-form-label">
+            Teléfono *
+          </label>
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            required
+            className="reservation-form-input"
+          />
+        </div>
+
+        {/* Tipo de Servicio */}
+        <div className="reservation-form-field">
+          <label className="reservation-form-label">
+            Tipo de Servicio *
+          </label>
+          <select
+            name="service"
+            value={formData.service}
+            onChange={handleInputChange}
+            required
+            className="reservation-form-select"
+          >
+            {services.map(service => (
+              <option key={service} value={service}>{service}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Fecha y Hora */}
+        <div className="reservation-form-grid">
+          <div className="reservation-form-field">
+            <label className="reservation-form-label">
+              Fecha *
+            </label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
+              required
+              className="reservation-form-input"
+            />
+          </div>
+          <div className="reservation-form-field">
+            <label className="reservation-form-label">
+              Hora *
+            </label>
+            <input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleInputChange}
+              required
+              className="reservation-form-input"
+            />
+          </div>
+        </div>
+
+        {/* Dirección */}
+        <div className="reservation-form-field">
+          <label className="reservation-form-label">
+            Dirección *
+          </label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            required
+            placeholder="Calle, número, ciudad"
+            className="reservation-form-input"
+          />
+        </div>
+
+        {/* Mensaje */}
+        <div className="reservation-form-field">
+          <label className="reservation-form-label">
+            Comentarios adicionales
+          </label>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            rows="4"
+            placeholder="Detalles especiales, instrucciones de acceso, etc."
+            className="reservation-form-textarea"
+          />
+        </div>
+
+        {/* Botón de envío */}
+        <button
+          type="submit"
+          className="reservation-form-button"
+        >
+          Enviar Reserva
+        </button>
       </form>
     </div>
   );
