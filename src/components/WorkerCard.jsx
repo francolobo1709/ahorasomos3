@@ -1,121 +1,116 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AvailabilityGrid from './AvailabilityGrid';
 import StarRating from './StarRating';
-import { formatDistance, generateWhatsAppMessage, openWhatsApp } from '../lib/utils';
-import { DAYS } from '../data/constants';
+import { formatDistance, openWhatsApp } from '../lib/utils';
 
 /**
- * Tarjeta de trabajador para mostrar en los resultados de búsqueda
- * @param {Object} props
- * @param {Object} props.worker - Datos del trabajador
- * @param {string} props.selectedDay - Día seleccionado para mostrar disponibilidad
+ * Tarjeta optimizada de trabajador con turnos de 4 horas
+ * Sistema escalable para backend
  */
-const WorkerCard = ({ worker, selectedDay = 'lunes' }) => {
+const WorkerCard = ({ worker }) => {
   const navigate = useNavigate();
 
-  const handleContact = (e, turnId) => {
-    e.stopPropagation(); // Evitar que se active el click de la tarjeta
-    const message = generateWhatsAppMessage(
-      worker.displayName,
-      turnId,
-      DAYS.find(d => d.id === selectedDay)?.label
-    );
-    openWhatsApp(worker.whatsapp, message);
+  // Turnos de 4 horas configurables
+  const turns = [
+    { id: 'morning', label: 'Mañana (8-12)', hour: '8-12h' },
+    { id: 'midday', label: 'Siesta (12-16)', hour: '12-16h' },
+    { id: 'afternoon', label: 'Tarde (16-20)', hour: '16-20h' }
+  ];
+
+  const handleContact = () => {
+    const message = `Hola ${worker.displayName}, vi tu perfil en AHORASOMOS3 y me gustaría solicitar una cotización.`;
+    openWhatsApp(worker.whatsapp || worker.phone, message);
   };
 
   const handleViewProfile = () => {
     navigate(`/worker/${worker.id}`);
   };
 
-  // Calcular total de turnos disponibles en la semana
-  const totalAvailableTurns = Object.values(worker.availability).reduce(
-    (acc, turns) => acc + turns.length,
-    0
-  );
+  // Verificar disponibilidad de cada turno (preparado para backend)
+  const checkTurnAvailability = (turnId) => {
+    // Esta lógica se puede conectar con datos reales del backend
+    if (worker.availability && typeof worker.availability === 'object') {
+      // Buscar en todos los días de la semana
+      return Object.values(worker.availability).some(dayTurns => 
+        Array.isArray(dayTurns) && dayTurns.includes(turnId)
+      );
+    }
+    return false;
+  };
 
   return (
-    <div
+    <div 
+      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow cursor-pointer"
       onClick={handleViewProfile}
-      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
     >
-      {/* Header con info básica */}
-      <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-800">{worker.displayName}</h3>
-            <p className="text-sm text-gray-600 mt-1">
-              📍 {worker.location.address}
-            </p>
-            {worker.distance && (
-              <p className="text-sm text-blue-600 font-semibold mt-1">
-                🚶 {formatDistance(worker.distance)}
-              </p>
-            )}
-          </div>
-          
-          {/* Rating */}
+      {/* Header */}
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-gray-800">{worker.displayName || worker.name}</h3>
+          {worker.distance && (
+            <span className="text-sm text-green-600 font-medium">{formatDistance(worker.distance)}</span>
+          )}
+          {worker.location?.address && (
+            <p className="text-xs text-gray-500 mt-1">📍 {worker.location.address}</p>
+          )}
+        </div>
+        
+        {/* Rating */}
+        {worker.rating && (
           <div className="text-right">
             <StarRating rating={worker.rating} readonly={true} size="sm" />
-            <p className="text-xs text-gray-500 mt-1">{worker.reviewsCount} opiniones</p>
+            {worker.reviewsCount > 0 && (
+              <p className="text-xs text-gray-500 mt-1">{worker.reviewsCount} opiniones</p>
+            )}
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Servicios */}
-        <div className="flex gap-2 mt-3 flex-wrap">
-          {worker.services.map(service => (
+      {/* Servicios */}
+      {worker.services && worker.services.length > 0 && (
+        <div className="flex gap-2 mb-4 flex-wrap">
+          {worker.services.slice(0, 3).map(service => (
             <span
               key={service}
-              className="px-3 py-1 bg-white text-xs font-semibold text-gray-700 rounded-full shadow-sm"
+              className="px-2 py-1 bg-blue-50 text-xs font-medium text-blue-700 rounded-lg"
             >
               {service}
             </span>
           ))}
         </div>
-      </div>
-
-      {/* Disponibilidad del día seleccionado */}
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-semibold text-gray-700">
-            Disponibilidad - {DAYS.find(d => d.id === selectedDay)?.label}
-          </h4>
-          <span className="text-xs text-gray-500">
-            {totalAvailableTurns} turnos esta semana
-          </span>
-        </div>
-        
-        <AvailabilityGrid availability={worker.availability[selectedDay] || []} />
-
-        {/* Botones de acción */}
-        <div className="mt-4 space-y-2">
-          {worker.availability[selectedDay]?.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={handleViewProfile}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
-              >
-                Ver Perfil
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const firstAvailableTurn = worker.availability[selectedDay][0];
-                  handleContact(e, firstAvailableTurn);
-                }}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
-              >
-                <span>💬</span>
-                WhatsApp
-              </button>
+      )}
+      
+      {/* Grid de turnos disponibles (4 horas) */}
+      <div className="grid grid-cols-3 gap-2 mb-6">
+        {turns.map(turn => {
+          const isAvailable = checkTurnAvailability(turn.id);
+          return (
+            <div 
+              key={turn.id} 
+              className={`text-[10px] p-2 rounded-lg text-center border transition-colors ${
+                isAvailable
+                  ? 'bg-green-50 border-green-200 text-green-700' 
+                  : 'bg-gray-50 border-gray-100 text-gray-400'
+              }`}
+            >
+              <div className="font-semibold">{turn.hour}</div>
+              <div className="text-[9px] mt-0.5">{isAvailable ? 'Disponible' : 'Ocupado'}</div>
             </div>
-          ) : (
-            <p className="text-center text-sm text-gray-500 py-2">
-              No disponible este día
-            </p>
-          )}
-        </div>
+          );
+        })}
       </div>
+
+      {/* Botón de contacto */}
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          handleContact();
+        }}
+        className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+      >
+        <span>💬</span>
+        Solicitar Cotización
+      </button>
     </div>
   );
 };
