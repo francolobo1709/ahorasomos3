@@ -86,7 +86,6 @@ export default function DashboardWorkerPage() {
                   availability={{}}
                   onSave={(newAvailability) => {
                     console.log('Guardando disponibilidad:', newAvailability);
-                    // TODO: Guardar en Firebase
                   }}
                 />
               </div>

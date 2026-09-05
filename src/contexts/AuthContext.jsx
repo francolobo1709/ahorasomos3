@@ -1,12 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile
-} from 'firebase/auth';
-import { auth, createUserProfile, getUserProfile } from '../lib/firebase';
+import apiClient from '../lib/axios';
 
 const AuthContext = createContext({});
 
@@ -15,47 +8,36 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      if (user) {
-        const profile = await getUserProfile(user.uid);
-        setUserProfile(profile);
-      } else {
-        setUserProfile(null);
-      }
-      setLoading(false);
-    });
-
-    return unsubscribe;
+    // Al no haber backend de login aún, simulamos que no hay usuario al cargar
+    setCurrentUser(null);
+    setUserProfile(null);
+    setLoading(false);
   }, []);
 
   const signup = async (email, password, userData) => {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password);
-    
-    await updateProfile(user, {
-      displayName: userData.name
-    });
-
-    await createUserProfile(user.uid, {
-      email,
-      name: userData.name,
-      role: userData.role, // 'worker' o 'client'
-      phone: userData.phone,
-      ...userData
-    });
-
+    // TODO: Implementar con Axios cuando el backend tenga rutas de registro
+    console.log("Signup simulado", email, userData);
+    const user = { uid: '123', email };
+    setCurrentUser(user);
+    setUserProfile({ email, role: userData.role, name: userData.name });
     return user;
   };
 
-  const login = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const login = async (email, password) => {
+    // TODO: Implementar con Axios cuando el backend tenga rutas de login
+    console.log("Login simulado", email);
+    const user = { uid: '123', email };
+    setCurrentUser(user);
+    setUserProfile({ email, role: 'cliente', name: 'Usuario Prueba' });
+    return user;
   };
 
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    setCurrentUser(null);
+    setUserProfile(null);
   };
 
   const value = {

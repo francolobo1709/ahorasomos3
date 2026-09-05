@@ -1,14 +1,4 @@
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  getDocs, 
-  doc, 
-  updateDoc,
-  serverTimestamp 
-} from 'firebase/firestore';
-import { db } from './firebase';
+import apiClient from './axios';
 
 /**
  * Agregar una nueva reseña
@@ -17,17 +7,8 @@ import { db } from './firebase';
  */
 export const addReview = async (reviewData) => {
   try {
-    const reviewsRef = collection(db, 'reviews');
-    const docRef = await addDoc(reviewsRef, {
-      ...reviewData,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
-
-    // Actualizar el rating promedio del trabajador
-    await updateWorkerRating(reviewData.workerId);
-
-    return docRef.id;
+    const response = await apiClient.post('/reviews', reviewData);
+    return response.data.id;
   } catch (error) {
     console.error('Error al agregar reseña:', error);
     throw error;
@@ -41,44 +22,13 @@ export const addReview = async (reviewData) => {
  */
 export const getWorkerReviews = async (workerId) => {
   try {
-    const reviewsRef = collection(db, 'reviews');
-    const q = query(reviewsRef, where('workerId', '==', workerId));
-    const snapshot = await getDocs(q);
-    
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    // Al no haber endpoint en el backend, simulamos retorno vacío
+    // const response = await apiClient.get(`/reviews/worker/${workerId}`);
+    // return response.data;
+    return [];
   } catch (error) {
     console.error('Error al obtener reseñas:', error);
-    throw error;
-  }
-};
-
-/**
- * Actualizar el rating promedio de un trabajador
- * @param {string} workerId - ID del trabajador
- */
-const updateWorkerRating = async (workerId) => {
-  try {
-    const reviews = await getWorkerReviews(workerId);
-    
-    if (reviews.length === 0) return;
-
-    // Calcular promedio
-    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-    const averageRating = totalRating / reviews.length;
-
-    // Actualizar en el perfil del trabajador
-    const workerRef = doc(db, 'users', workerId);
-    await updateDoc(workerRef, {
-      rating: Math.round(averageRating * 10) / 10, // Redondear a 1 decimal
-      reviewsCount: reviews.length,
-      updatedAt: serverTimestamp()
-    });
-  } catch (error) {
-    console.error('Error al actualizar rating:', error);
-    throw error;
+    return [];
   }
 };
 
@@ -90,17 +40,11 @@ const updateWorkerRating = async (workerId) => {
  */
 export const hasUserReviewed = async (userId, workerId) => {
   try {
-    const reviewsRef = collection(db, 'reviews');
-    const q = query(
-      reviewsRef, 
-      where('userId', '==', userId),
-      where('workerId', '==', workerId)
-    );
-    const snapshot = await getDocs(q);
-    
-    return !snapshot.empty;
+    // const response = await apiClient.get(`/reviews/check/${userId}/${workerId}`);
+    // return response.data.hasReviewed;
+    return false;
   } catch (error) {
     console.error('Error al verificar reseña:', error);
-    throw error;
+    return false;
   }
 };

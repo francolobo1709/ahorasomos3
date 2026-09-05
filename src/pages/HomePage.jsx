@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import WorkerCard from '../components/WorkerCard';
-import { mockWorkers, DAYS, TURNS } from '../data/constants';
+import { DAYS, TURNS } from '../data/constants';
 import { sortByProximity, filterByAvailability } from '../lib/utils';
 import { useLocation } from '../hooks/useLocation';
+import apiClient from '../lib/axios';
 
 const HomePage = () => {
   const [workers, setWorkers] = useState([]);
   const [filteredWorkers, setFilteredWorkers] = useState([]);
+  const [dbWorkers, setDbWorkers] = useState([]); // Trabajadores reales de la DB
   const [selectedDay, setSelectedDay] = useState('lunes');
   const [selectedTurn, setSelectedTurn] = useState(null);
   
   // Usar el hook de geolocalización
   const { location, loading, error: locationError, requestLocation } = useLocation();
 
+  // Cargar trabajadores reales del backend
   useEffect(() => {
+    const fetchWorkers = async () => {
+      try {
+        const response = await apiClient.get('/users/workers');
+        setDbWorkers(response.data);
+      } catch (error) {
+        console.error('❌ Error conectando al Backend:', error.message);
+      }
+    };
+    fetchWorkers();
+  }, []);
+
+  // Ordenar los trabajadores cuando tengamos la ubicación y los datos
+  useEffect(() => {
+    if (dbWorkers.length === 0) return;
+
     if (location) {
       // Ordenar trabajadores por proximidad
-      const sortedWorkers = sortByProximity(mockWorkers, location);
+      const sortedWorkers = sortByProximity(dbWorkers, location);
       setWorkers(sortedWorkers);
       setFilteredWorkers(sortedWorkers);
     } else if (!loading && locationError) {
       // Si hay error, mostrar trabajadores sin ordenar
-      setWorkers(mockWorkers);
-      setFilteredWorkers(mockWorkers);
+      setWorkers(dbWorkers);
+      setFilteredWorkers(dbWorkers);
     }
-  }, [location, loading, locationError]);
+  }, [location, loading, locationError, dbWorkers]);
 
   // Filtrar trabajadores cuando cambian los filtros
   useEffect(() => {
